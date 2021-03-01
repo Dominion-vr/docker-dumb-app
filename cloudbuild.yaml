@@ -10,7 +10,7 @@ steps:
       "docker-dumb-app-baptistef",
       "--allow-unauthenticated",
       "--region",
-      "eu-west-1c",
+      "europe-west1",
       "--image",
       'gcr.io/padok-lab/docker-dumb-app-baptistef:$COMMIT_SHA',
       "--platform",
