@@ -1,0 +1,23 @@
+BRANCH=${1-master}
+
+# Clone the repo with the right branch
+echo "CLONE REMOTE BRANCH $BRANCH"
+git clone -b $BRANCH https://github.com/padok-team/docker-dumb-app.git &>/dev/null
+
+# Build image
+echo "DESTROY PREVIOUS CONTAINER"
+docker stop docker-dumb-app &>/dev/null
+docker rm docker-dumb-app &>/dev/null
+echo "DESTROY PREVIOUS IMAGE"
+docker rmi docker-dumb-app &>/dev/null
+echo "BUILD NEW IMAGE"
+docker build -t docker-dumb-app ./docker-dumb-app > /dev/null
+
+# Launch image
+echo "LAUNCH NEW CONTAINER"
+docker run -d -p 80:8080 --name docker-dumb-app docker-dumb-app > /dev/null
+
+echo "REMOVE SIDE EFFECTS"
+rm -rf ./docker-dumb-app
+
+echo "DONE"

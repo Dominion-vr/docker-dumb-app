@@ -1,0 +1,17 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/padok-lab/docker-dumb-app-baptistef:$COMMIT_SHA', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/padok-lab/docker-dumb-app-baptistef:$COMMIT_SHA']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: [
+      "run",
+      "deploy",
+      "docker-dumb-app-baptistef",
+      "--region",
+      "eu-west-1c",
+      "--image",
+      'gcr.io/padok-lab/docker-dumb-app-baptistef:$COMMIT_SHA',
+      "--platform",
+      "managed"
+    ]

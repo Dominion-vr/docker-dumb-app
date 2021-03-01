@@ -1,0 +1,42 @@
+# Usage : ./exec deploy|destroy [-b branch] [-i key_path]
+
+# GLOBAL VAR
+REMOTE_HOST="ec2-35-178-244-131.eu-west-2.compute.amazonaws.com"
+
+# Obligatory argument
+if [[ $# -eq 0 ]] ; then
+    echo 'ERROR. Usage : ./exec deploy|destroy [-b branch] [-i key_path]'
+    exit 1
+fi
+case "$1" in
+    deploy) SCRIPT_PATH="./remote/deploy" ;;
+    destroy) SCRIPT_PATH="./remote/destroy" ;;
+    *) echo 'ERROR. Usage : ./exec deploy|destroy [-b branch] [-i key_path]'
+       exit 1
+    ;;
+esac
+shift
+
+# Optional arguments
+BRANCH="master"
+KEY_PATH=""
+while getopts ":b:i:" opt; do
+  case $opt in
+    b) BRANCH="$OPTARG"
+    ;;
+    i) KEY_PATH="$OPTARG"
+    ;;
+    \?) echo "WARNING. Invalid option -$OPTARG" >&2
+    ;;
+  esac
+done
+
+# Launch script remotely
+if [[ -z "$KEY_PATH" ]]
+then
+    ssh ubuntu@$REMOTE_HOST 'bash -s' < ./remote/docker_install
+    ssh ubuntu@$REMOTE_HOST 'bash -s' < $SCRIPT_PATH $BRANCH
+else
+    ssh -i $KEY_PATH ubuntu@$REMOTE_HOST 'bash -s' < ./remote/docker_install
+    ssh -i $KEY_PATH ubuntu@$REMOTE_HOST 'bash -s' < $SCRIPT_PATH $BRANCH
+fi

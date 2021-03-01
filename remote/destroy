@@ -1,0 +1,10 @@
+if [[ -d "./docker-dumb-app" ]]
+then
+    rm -rf ./docker-dumb-app
+fi
+
+docker stop docker-dumb-app > /dev/null 2>&1
+docker rm docker-dumb-app > /dev/null 2>&1
+docker rmi docker-dumb-app > /dev/null 2>&1
+
+echo "DESTROYED IMAGE AND CONTAINER"

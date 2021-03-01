@@ -1,0 +1,16 @@
+# Check if docker is installed
+echo "CHECK IF DOCKER IS INSTALLED"
+docker --version &> /dev/null
+if [[ $? = 127 ]]
+then
+  {
+    # Install curl if needed
+    which curl &> /dev/null || (sudo apt-get update -qq && sudo apt-get install curl -y)
+
+    # Install docker
+    curl --silent -SL https://get.docker.com/ | sh
+
+    # Avoid using sudo to launch docker
+    sudo usermod -aG docker ubuntu
+  } &> /dev/null
+fi
