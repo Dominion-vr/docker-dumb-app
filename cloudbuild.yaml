@@ -8,7 +8,7 @@ steps:
       "run",
       "deploy",
       "docker-dumb-app-baptistef",
-      "--allow-unauthenticated"
+      "--allow-unauthenticated",
       "--region",
       "eu-west-1c",
       "--image",
